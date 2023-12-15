@@ -1,14 +1,13 @@
 package com.example.layeredarchitecture.dao;
 
 import com.example.layeredarchitecture.db.DBConnection;
-import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.view.tdm.ItemTM;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class ItemDAOImpl implements ItemDAO{
+public class ItemDAOImpl implements ItemDAO {
 
     @Override
     public ArrayList<ItemDTO> getAllItems() throws SQLException, ClassNotFoundException {
@@ -41,6 +40,17 @@ public class ItemDAOImpl implements ItemDAO{
         pstm.setString(2, dto.getDescription());
         pstm.setBigDecimal(3, dto.getUnitPrice());
         pstm.setInt(4, dto.getQtyOnHand());
+        return pstm.executeUpdate() > 0;
+    }
+
+    @Override
+    public boolean isUpdate(String code, String description, int qtyOnHand, BigDecimal unitPrice) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
+        pstm.setString(1, description);
+        pstm.setBigDecimal(2, unitPrice);
+        pstm.setInt(3, qtyOnHand);
+        pstm.setString(4, code);
         return pstm.executeUpdate() > 0;
     }
 

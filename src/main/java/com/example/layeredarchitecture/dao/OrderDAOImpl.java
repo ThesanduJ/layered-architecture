@@ -19,9 +19,10 @@ public class OrderDAOImpl implements OrderDAO {
 
         return rst.next() ? String.format("OID-%03d", (Integer.parseInt(rst.getString("oid").replace("OID-", "")) + 1)) : "OID-001";
     }
+
     @Override
     public boolean isSave(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
-       Connection connection = DBConnection.getDbConnection().getConnection();
+        Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement stm = connection.prepareStatement("SELECT oid FROM `Orders` WHERE oid=?");
         stm.setString(1, orderId);
         /*if order id already exist*/
@@ -56,7 +57,7 @@ public class OrderDAOImpl implements OrderDAO {
             }
 
 //                //Search & Update Item
-            PlaceOrderFormController formController=new PlaceOrderFormController();
+            PlaceOrderFormController formController = new PlaceOrderFormController();
             ItemDTO item = formController.findItem(detail.getItemCode());
             item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
 

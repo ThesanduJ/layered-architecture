@@ -23,13 +23,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.*;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 
 public class PlaceOrderFormController {
@@ -48,10 +47,10 @@ public class PlaceOrderFormController {
     public Label lblId;
     public Label lblDate;
     public Label lblTotal;
+    ItemDAO itemDAO = new ItemDAOImpl();
+    CustomerDAO customerDAO = new CustomerDAOImpl();
+    OrderDAO orderDAO = new OrderDAOImpl();
     private String orderId;
-    ItemDAO itemDAO=new ItemDAOImpl();
-    CustomerDAO customerDAO=new CustomerDAOImpl();
-    OrderDAO orderDAO=new OrderDAOImpl();
 
     public void initialize() throws SQLException, ClassNotFoundException {
 
@@ -97,7 +96,7 @@ public class PlaceOrderFormController {
             if (newValue != null) {
                 try {
 //                    /*Search Customer*/
-                    String customer=customerDAO.searchCustomer(newValue);
+                    String customer = customerDAO.searchCustomer(newValue);
                     try {
                         if (!existCustomer(newValue + "")) {
 //                            "There is no such customer associated with the id " + id
@@ -130,7 +129,7 @@ public class PlaceOrderFormController {
                     if (!existItem(newItemCode + "")) {
 //                        throw new NotFoundException("There is no such item associated with the id " + code);
                     }
-                    ItemDTO item=itemDAO.searchItem(newItemCode);
+                    ItemDTO item = itemDAO.searchItem(newItemCode);
 
                     txtDescription.setText(item.getDescription());
                     txtUnitPrice.setText(item.getUnitPrice().setScale(2).toString());
@@ -175,18 +174,18 @@ public class PlaceOrderFormController {
     }
 
     private boolean existItem(String code) throws SQLException, ClassNotFoundException {
-        boolean isExits=itemDAO.isExits(code);
+        boolean isExits = itemDAO.isExits(code);
         return isExits;
     }
 
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
-        boolean isExits=customerDAO.exitsCustomer(id);
+        boolean isExits = customerDAO.exitsCustomer(id);
         return isExits;
     }
 
     public String generateNewOrderId() {
         try {
-            String orderId=orderDAO.genarateOrderId();
+            String orderId = orderDAO.genarateOrderId();
             return orderId;
 
         } catch (SQLException e) {
@@ -280,7 +279,7 @@ public class PlaceOrderFormController {
         for (OrderDetailTM detail : tblOrderDetails.getItems()) {
             total = total.add(detail.getTotal());
         }
-        lblTotal.setText("Total: " +total);
+        lblTotal.setText("Total: " + total);
     }
 
     private void enableOrDisablePlaceOrderButton() {
@@ -313,7 +312,7 @@ public class PlaceOrderFormController {
         /*Transaction*/
         try {
 
-            boolean isSaved =orderDAO.isSave(orderId, orderDate, customerId, orderDetails);
+            boolean isSaved = orderDAO.isSave(orderId, orderDate, customerId, orderDetails);
             return isSaved;
 
         } catch (SQLException throwables) {
@@ -327,7 +326,7 @@ public class PlaceOrderFormController {
 
     public ItemDTO findItem(String code) {
         try {
-            ItemDTO findItem=itemDAO.findItem(code);
+            ItemDTO findItem = itemDAO.findItem(code);
             return findItem;
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find the Item " + code, e);

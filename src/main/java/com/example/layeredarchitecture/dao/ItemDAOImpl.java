@@ -6,6 +6,7 @@ import com.example.layeredarchitecture.model.ItemDTO;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ItemDAOImpl implements ItemDAO {
 
@@ -83,4 +84,5 @@ public class ItemDAOImpl implements ItemDAO {
         rst.next();
         return new ItemDTO(code, rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
     }
+
 }

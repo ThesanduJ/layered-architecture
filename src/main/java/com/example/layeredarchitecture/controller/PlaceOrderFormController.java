@@ -5,7 +5,6 @@ import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
-import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.example.layeredarchitecture.view.tdm.OrderDetailTM;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -213,14 +212,10 @@ public class PlaceOrderFormController {
 
     private void loadAllCustomerIds() {
         try {
-            Connection connection = DBConnection.getDbConnection().getConnection();
-            Statement stm = connection.createStatement();
-            ResultSet rst = stm.executeQuery("SELECT * FROM Customer");
-
-            while (rst.next()) {
-                cmbCustomerId.getItems().add(rst.getString("id"));
+            ArrayList<CustomerDTO> allCustomer = customerDAO.getAllCustomer();
+            for (CustomerDTO c : allCustomer) {
+                cmbCustomerId.getItems().add(c.getId());
             }
-
 
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to load customer ids").show();
@@ -231,12 +226,9 @@ public class PlaceOrderFormController {
 
     private void loadAllItemCodes() {
         try {
-            /*Get all items*/
-            Connection connection = DBConnection.getDbConnection().getConnection();
-            Statement stm = connection.createStatement();
-            ResultSet rst = stm.executeQuery("SELECT * FROM Item");
-            while (rst.next()) {
-                cmbItemCode.getItems().add(rst.getString("code"));
+            ArrayList<ItemDTO> allItem = itemDAO.getAllItems();
+            for (ItemDTO i : allItem) {
+                cmbItemCode.getItems().add(i.getCode());
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();

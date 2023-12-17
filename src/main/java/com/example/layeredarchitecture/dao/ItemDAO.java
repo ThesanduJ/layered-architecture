@@ -22,5 +22,6 @@ public interface ItemDAO {
     boolean isUpdate(String code, String description, int qtyOnHand, BigDecimal unitPrice) throws SQLException, ClassNotFoundException;
 
     ItemDTO findItem(String code) throws SQLException, ClassNotFoundException;
+    ItemDTO searchItem(Object newItemCode) throws SQLException, ClassNotFoundException ;
 
 }

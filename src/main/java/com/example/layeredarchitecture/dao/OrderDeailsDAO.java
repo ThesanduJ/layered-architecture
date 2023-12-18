@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface OrderDAO {
-    String genarateOrderId() throws SQLException, ClassNotFoundException;
+public interface OrderDeailsDAO {
+    boolean isSave(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException;
+
 }

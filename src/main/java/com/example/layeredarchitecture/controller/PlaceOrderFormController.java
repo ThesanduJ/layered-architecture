@@ -50,6 +50,7 @@ public class PlaceOrderFormController {
     ItemDAO itemDAO = new ItemDAOImpl();
     CustomerDAO customerDAO = new CustomerDAOImpl();
     OrderDAO orderDAO = new OrderDAOImpl();
+    OrderDeailsDAO orderDeailsDAO = new OrderDetailsDAOImpl();
     private String orderId;
 
     public void initialize() throws SQLException, ClassNotFoundException {
@@ -312,7 +313,7 @@ public class PlaceOrderFormController {
         /*Transaction*/
         try {
 
-            boolean isSaved = orderDAO.isSave(orderId, orderDate, customerId, orderDetails);
+            boolean isSaved = orderDeailsDAO.isSave(orderId, orderDate, customerId, orderDetails);
             return isSaved;
 
         } catch (SQLException throwables) {

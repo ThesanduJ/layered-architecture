@@ -1,6 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.dao.*;
+import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
@@ -23,6 +24,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -290,7 +294,7 @@ public class PlaceOrderFormController {
     public void txtQty_OnAction(ActionEvent actionEvent) {
     }
 
-    public void btnPlaceOrder_OnAction(ActionEvent actionEvent) {
+    public void btnPlaceOrder_OnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         boolean b = saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),
                 tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
 
@@ -309,12 +313,55 @@ public class PlaceOrderFormController {
         calculateTotal();
     }
 
-    public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) {
+    public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
         /*Transaction*/
+        Connection connection=null;
         try {
 
-            boolean isSaved = orderDeailsDAO.isSave(orderId, orderDate, customerId, orderDetails);
-            return isSaved;
+            connection = DBConnection.getDbConnection().getConnection();
+            boolean isExits=orderDAO.isExits(orderId);
+
+            if (isExits) {
+                return false;
+            }
+
+            connection.setAutoCommit(false);
+            boolean isSave=orderDAO.saveOrder(orderId,orderDate,customerId);
+
+            if (!isSave) {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                return false;
+            }
+
+
+            for (OrderDetailDTO detail : orderDetails) {
+                boolean orderDeailsDAOSave=orderDeailsDAO.isSave(orderId,detail);
+
+                if (!orderDeailsDAOSave) {
+                    connection.rollback();
+                    connection.setAutoCommit(true);
+                    return false;
+                }
+
+//                //Search & Update Item
+                ItemDTO item = findItem(detail.getItemCode());
+                item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
+
+
+                boolean itemSave=itemDAO.isUpdate(item.getCode(),item.getDescription(),item.getQtyOnHand(),item.getUnitPrice());
+
+                if (!itemSave) {
+                    connection.rollback();
+                    connection.setAutoCommit(true);
+                    return false;
+                }
+
+
+            connection.commit();
+            connection.setAutoCommit(true);
+            return true;
+        }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();

@@ -7,6 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderDeailsDAO {
-    boolean isSave(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException;
+    boolean isSave(String orderId,OrderDetailDTO dto) throws SQLException, ClassNotFoundException;
 
 }

@@ -4,10 +4,10 @@ import com.example.layeredarchitecture.dao.custom.CustomerDAO;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDeailsDAO;
-import com.example.layeredarchitecture.dao.impl.CustomerDAOImpl;
-import com.example.layeredarchitecture.dao.impl.ItemDAOImpl;
-import com.example.layeredarchitecture.dao.impl.OrderDAOImpl;
-import com.example.layeredarchitecture.dao.impl.OrderDetailsDAOImpl;
+import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
+import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
+import com.example.layeredarchitecture.dao.custom.impl.OrderDAOImpl;
+import com.example.layeredarchitecture.dao.custom.impl.OrderDetailsDAOImpl;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
@@ -184,18 +184,18 @@ public class PlaceOrderFormController {
     }
 
     private boolean existItem(String code) throws SQLException, ClassNotFoundException {
-        boolean isExits = itemDAO.isExits(code);
+        boolean isExits = itemDAO.exits(code);
         return isExits;
     }
 
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
-        boolean isExits = customerDAO.exitsCustomer(id);
+        boolean isExits = customerDAO.exits(id);
         return isExits;
     }
 
     public String generateNewOrderId() {
         try {
-            String orderId = orderDAO.genarateOrderId();
+            String orderId = orderDAO.genarateId();
             return orderId;
 
         } catch (SQLException e) {
@@ -208,7 +208,7 @@ public class PlaceOrderFormController {
 
     private void loadAllCustomerIds() {
         try {
-            ArrayList<CustomerDTO> allCustomer = customerDAO.getAllCustomer();
+            ArrayList<CustomerDTO> allCustomer = customerDAO.getAll();
             for (CustomerDTO c : allCustomer) {
                 cmbCustomerId.getItems().add(c.getId());
             }
@@ -222,7 +222,7 @@ public class PlaceOrderFormController {
 
     private void loadAllItemCodes() {
         try {
-            ArrayList<ItemDTO> allItem = itemDAO.getAllItems();
+            ArrayList<ItemDTO> allItem = itemDAO.getAll();
             for (ItemDTO i : allItem) {
                 cmbItemCode.getItems().add(i.getCode());
             }
@@ -324,7 +324,7 @@ public class PlaceOrderFormController {
         try {
 
             connection = DBConnection.getDbConnection().getConnection();
-            boolean isExits = orderDAO.isExits(orderId);
+            boolean isExits = orderDAO.exits(orderId);
 
             if (isExits) {
                 return false;
@@ -354,7 +354,7 @@ public class PlaceOrderFormController {
                 item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
 
 
-                boolean itemSave = itemDAO.isUpdate(item.getCode(), item.getDescription(), item.getQtyOnHand(), item.getUnitPrice());
+                boolean itemSave = itemDAO.update(item);
 
                 if (!itemSave) {
                     connection.rollback();

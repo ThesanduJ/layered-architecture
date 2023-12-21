@@ -209,7 +209,7 @@ public class ManageItemsFormController {
     }
 
 
-    private boolean existItem(String code) throws SQLException, ClassNotFoundException {
+    public boolean existItem(String code) throws SQLException, ClassNotFoundException {
         boolean isExits = itemDAO.isExits(code);
         return isExits;
     }

@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -315,18 +313,18 @@ public class PlaceOrderFormController {
 
     public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
         /*Transaction*/
-        Connection connection=null;
+        Connection connection = null;
         try {
 
             connection = DBConnection.getDbConnection().getConnection();
-            boolean isExits=orderDAO.isExits(orderId);
+            boolean isExits = orderDAO.isExits(orderId);
 
             if (isExits) {
                 return false;
             }
 
             connection.setAutoCommit(false);
-            boolean isSave=orderDAO.saveOrder(orderId,orderDate,customerId);
+            boolean isSave = orderDAO.saveOrder(orderId, orderDate, customerId);
 
             if (!isSave) {
                 connection.rollback();
@@ -336,7 +334,7 @@ public class PlaceOrderFormController {
 
 
             for (OrderDetailDTO detail : orderDetails) {
-                boolean orderDeailsDAOSave=orderDeailsDAO.isSave(orderId,detail);
+                boolean orderDeailsDAOSave = orderDeailsDAO.isSave(orderId, detail);
 
                 if (!orderDeailsDAOSave) {
                     connection.rollback();
@@ -349,7 +347,7 @@ public class PlaceOrderFormController {
                 item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
 
 
-                boolean itemSave=itemDAO.isUpdate(item.getCode(),item.getDescription(),item.getQtyOnHand(),item.getUnitPrice());
+                boolean itemSave = itemDAO.isUpdate(item.getCode(), item.getDescription(), item.getQtyOnHand(), item.getUnitPrice());
 
                 if (!itemSave) {
                     connection.rollback();
@@ -358,10 +356,10 @@ public class PlaceOrderFormController {
                 }
 
 
-            connection.commit();
-            connection.setAutoCommit(true);
-            return true;
-        }
+                connection.commit();
+                connection.setAutoCommit(true);
+                return true;
+            }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class QueryDAOImpl implements QueryDAO {
     @Override
     public PlaceOrderDTO printDeatils() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet= SQLUtil.execute("SELECT\n" +
+        ResultSet resultSet = SQLUtil.execute("SELECT\n" +
                 "    o.oid AS order_id,\n" +
                 "    o.date AS order_date,\n" +
                 "    c.id AS customer_id,\n" +

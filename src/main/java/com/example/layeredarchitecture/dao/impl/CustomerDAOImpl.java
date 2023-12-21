@@ -1,5 +1,7 @@
-package com.example.layeredarchitecture.dao;
+package com.example.layeredarchitecture.dao.impl;
 
+import com.example.layeredarchitecture.dao.SQLUtil;
+import com.example.layeredarchitecture.dao.custom.CustomerDAO;
 import com.example.layeredarchitecture.model.CustomerDTO;
 
 import java.sql.PreparedStatement;
@@ -59,9 +61,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public String searchCustomer(Object newValue) throws SQLException, ClassNotFoundException {
-        PreparedStatement pstm = SQLUtil.execute("SELECT * FROM Customer WHERE id=?");
-        pstm.setString(1, newValue + "");
-        ResultSet rst = pstm.executeQuery();
+        ResultSet rst = SQLUtil.execute("SELECT * FROM Customer WHERE id=?",newValue);
         rst.next();
         CustomerDTO customerDTO = new CustomerDTO(newValue + "", rst.getString("name"), rst.getString("address"));
         return customerDTO.getName();

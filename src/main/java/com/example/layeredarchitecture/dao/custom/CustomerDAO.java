@@ -6,7 +6,7 @@ import com.example.layeredarchitecture.model.CustomerDTO;
 import java.sql.SQLException;
 
 public interface CustomerDAO extends CrudDAO<CustomerDTO> {
-//    ArrayList<CustomerDTO> getAllCustomer() throws SQLException, ClassNotFoundException;
+    //    ArrayList<CustomerDTO> getAllCustomer() throws SQLException, ClassNotFoundException;
 //
 //    boolean saveCustomer(String id, String name, String address) throws SQLException, ClassNotFoundException;
 //

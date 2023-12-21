@@ -187,7 +187,7 @@ public class ManageCustomersFormController {
     }
 
 
-    boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
+    public boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
         boolean isExits = customerDAO.exitsCustomer(id);
         return isExits;
     }

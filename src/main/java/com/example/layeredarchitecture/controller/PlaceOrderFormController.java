@@ -1,7 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.bo.custom.PlaceOrderBo;
-import com.example.layeredarchitecture.bo.custom.PlaceOrderObImpl;
+import com.example.layeredarchitecture.bo.impl.PlaceOrderObImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
@@ -52,6 +52,7 @@ public class PlaceOrderFormController {
 //    CustomerDAO customerDAO = new CustomerDAOImpl();
 //    OrderDAO orderDAO = new OrderDAOImpl();
 //    OrderDeailsDAO orderDeailsDAO = new OrderDetailsDAOImpl();
+
 PlaceOrderBo placeOrderOb=new PlaceOrderObImpl();
     private String orderId;
 

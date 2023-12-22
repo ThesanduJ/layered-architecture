@@ -1,5 +1,6 @@
-package com.example.layeredarchitecture.bo;
+package com.example.layeredarchitecture.bo.custom;
 
+import com.example.layeredarchitecture.bo.custom.PlaceOrderBo;
 import com.example.layeredarchitecture.dao.custom.CustomerDAO;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDAO;
@@ -19,7 +20,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaceOrderObImpl implements PlaceOrderBo{
+public class PlaceOrderObImpl implements PlaceOrderBo {
     ItemDAO itemDAO = new ItemDAOImpl();
     CustomerDAO customerDAO = new CustomerDAOImpl();
     OrderDAO orderDAO = new OrderDAOImpl();

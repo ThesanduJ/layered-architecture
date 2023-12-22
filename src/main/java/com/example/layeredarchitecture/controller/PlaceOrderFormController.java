@@ -1,16 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.bo.PlaceOrderBo;
-import com.example.layeredarchitecture.bo.PlaceOrderObImpl;
-import com.example.layeredarchitecture.dao.custom.CustomerDAO;
-import com.example.layeredarchitecture.dao.custom.ItemDAO;
-import com.example.layeredarchitecture.dao.custom.OrderDAO;
-import com.example.layeredarchitecture.dao.custom.OrderDeailsDAO;
-import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.OrderDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.OrderDetailsDAOImpl;
-import com.example.layeredarchitecture.db.DBConnection;
+import com.example.layeredarchitecture.bo.custom.PlaceOrderBo;
+import com.example.layeredarchitecture.bo.custom.PlaceOrderObImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
@@ -33,7 +24,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -62,6 +52,7 @@ public class PlaceOrderFormController {
 //    CustomerDAO customerDAO = new CustomerDAOImpl();
 //    OrderDAO orderDAO = new OrderDAOImpl();
 //    OrderDeailsDAO orderDeailsDAO = new OrderDetailsDAOImpl();
+PlaceOrderBo placeOrderOb=new PlaceOrderObImpl();
     private String orderId;
 
     public void initialize() throws SQLException, ClassNotFoundException {
